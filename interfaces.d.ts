@@ -12,7 +12,7 @@ export interface CookieSetOptions {
     encode?: (value: string) => string;
 }
 export interface StorageInterface {
-    get(name: string, options?: CookieGetOptions): any;
+    get: (name: string, options?: CookieGetOptions) => any;
     set(name: string, value: Data, options?: CookieSetOptions): void;
     remove(name: string, options?: CookieSetOptions): void;
 }
