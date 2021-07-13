@@ -10,15 +10,17 @@ import {
 } from './interfaces';
 
 export default class Token extends Base implements BaseInterface {
-  protected defaultConfig: TokenConfig = {
+  public defaultConfig: TokenConfig = {
     prefix: 'oauth_',
     name: 'token',
   };
 
   private parsed: ParseTokenInterface;
 
-  constructor(storage: StorageInterface, config?: TokenConfig) {
-    super(storage, config);
+  constructor(protected storage: StorageInterface, config?: TokenConfig) {
+    super(storage);
+
+    this.setConfig(this.defaultConfig, config);
   }
 
   public set(token: string, options?: CookieSetOptions): void {
@@ -61,8 +63,8 @@ export default class Token extends Base implements BaseInterface {
     return filtered.length <= 0;
   }
 
-  public loadToken(options?: CookieGetOptions): boolean {
-    const token = this.get(options);
+  public async loadToken(options?: CookieGetOptions): Promise<boolean> {
+    const token = await this.get(options);
 
     if (!token) {
       return false;

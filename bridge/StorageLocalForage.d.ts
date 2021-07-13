@@ -1,8 +1,8 @@
-import { CookieGetOptions, CookieSetOptions, StorageInterface, Data } from '../interfaces';
+import { CookieGetOptions, CookieSetOptions, Data, StorageInterface } from '../interfaces';
 export default class StorageLocalForage implements StorageInterface {
-    private storage;
-    constructor(name?: string);
+    private instance;
+    constructor(instance: LocalForage);
     set(name: string, value: Data, _options?: CookieSetOptions): void;
-    get(name: string, _options?: CookieGetOptions): string;
-    remove(name: string): void;
+    get(name: string, _options?: CookieGetOptions): Promise<string>;
+    remove(name: string): Promise<void>;
 }

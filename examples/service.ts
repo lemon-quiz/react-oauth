@@ -1,6 +1,6 @@
+import { OAuthConfigInterface, StorageInterface } from '../src';
 import Challenge from '../src/challenge';
-import Client from '../src/client';
-import { OAuthConfigInterface, StorageInterface } from '../src/interfaces';
+import Clientxxx from '../src/client';
 import RefreshToken from '../src/refreshToken';
 import State from '../src/state';
 import Token from '../src/token';
@@ -24,7 +24,7 @@ export default class OAuthService {
 
   private state: State;
 
-  private client: Client;
+  private client: Clientxxx;
 
   constructor(
     private api: any,
@@ -36,7 +36,7 @@ export default class OAuthService {
     this.challenge = new Challenge(localStorage);
     this.state = new State(localStorage);
     this.refreshToken = new RefreshToken(localStorage);
-    this.client = new Client(this.oAuthConfig, this.challenge, this.state);
+    this.client = new Clientxxx(this.oAuthConfig, this.challenge, this.state);
   }
 
   public authenticate() {

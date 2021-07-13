@@ -1,5 +1,7 @@
 import Base from './base';
-import { BaseInterface, TokenConfig } from './interfaces';
+import { BaseInterface, StorageInterface, TokenConfig } from './interfaces';
 export default class State extends Base implements BaseInterface {
-    protected defaultConfig: TokenConfig;
+    protected storage: StorageInterface;
+    defaultConfig: TokenConfig;
+    constructor(storage: StorageInterface, config?: TokenConfig);
 }

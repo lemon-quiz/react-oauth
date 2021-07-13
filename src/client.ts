@@ -14,6 +14,14 @@ export default class Client {
               private state: State) { // eslint-disable-next-line no-empty-function
   }
 
+  public getConfig(key?: string): string | OAuthConfigInterface {
+    if (key) {
+      return this.config[key];
+    }
+
+    return this.config;
+  }
+
   public authorize(scope: string): void {
     if (!window) {
       throw new Error('Oauth service can only be run client side.');
@@ -21,7 +29,7 @@ export default class Client {
 
     const challenge = this.getChallenge();
     const state = uuidv4().replaceAll('-', '');
-    this.state.set('state', state);
+    this.state.set(state);
 
     const { client_id, authenticateUri } = this.config;
 
@@ -58,9 +66,9 @@ export default class Client {
     return hash;
   }
 
-  public getRequestTokenData(state: string, code: string): DataInterface {
-    const localState = this.state.get();
-    const challenge = this.challenge.get();
+  public async getRequestTokenData(state: string, code: string): Promise<DataInterface> {
+    const localState = await this.state.get();
+    const challenge = await this.challenge.get();
 
     if (localState !== state) {
       throw new Error('State do not match');
@@ -76,6 +84,19 @@ export default class Client {
         code_verifier: challenge,
         redirect_uri: this.getRedirectUri(),
         grant_type: 'authorization_code',
+      },
+    };
+  }
+
+  public getRefreshTokenData(scope: string, token: string) {
+    const { client_id, tokenUri } = this.config;
+    return {
+      uri: tokenUri,
+      data: {
+        client_id,
+        scope,
+        refresh_token: token,
+        grant_type: 'refresh_token',
       },
     };
   }

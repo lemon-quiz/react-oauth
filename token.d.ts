@@ -1,7 +1,8 @@
 import Base from './base';
 import { BaseInterface, CookieGetOptions, CookieSetOptions, StorageInterface, TokenConfig } from './interfaces';
 export default class Token extends Base implements BaseInterface {
-    protected defaultConfig: TokenConfig;
+    protected storage: StorageInterface;
+    defaultConfig: TokenConfig;
     private parsed;
     constructor(storage: StorageInterface, config?: TokenConfig);
     set(token: string, options?: CookieSetOptions): void;
@@ -10,5 +11,5 @@ export default class Token extends Base implements BaseInterface {
     isLoaded(): boolean;
     isExpired(): boolean;
     guard(scope?: string | string[]): boolean;
-    loadToken(options?: CookieGetOptions): boolean;
+    loadToken(options?: CookieGetOptions): Promise<boolean>;
 }

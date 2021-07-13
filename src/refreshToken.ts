@@ -5,8 +5,14 @@ import {
 } from './interfaces';
 
 export default class RefreshToken extends Base implements BaseInterface {
-  protected defaultConfig: TokenConfig = {
+  public defaultConfig: TokenConfig = {
     prefix: 'oauth_',
     name: 'refresh_token',
   };
+
+  constructor(protected storage: StorageInterface, config?: TokenConfig) {
+    super(storage);
+
+    this.setConfig(this.defaultConfig, config);
+  }
 }

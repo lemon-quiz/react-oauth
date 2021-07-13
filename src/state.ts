@@ -1,12 +1,18 @@
 import Base from './base';
 import {
-  BaseInterface,
+  BaseInterface, StorageInterface,
   TokenConfig,
 } from './interfaces';
 
 export default class State extends Base implements BaseInterface {
-  protected defaultConfig: TokenConfig = {
+  public defaultConfig: TokenConfig = {
     prefix: 'oauth_',
     name: 'state',
   };
+
+  constructor(protected storage: StorageInterface, config?: TokenConfig) {
+    super(storage);
+
+    this.setConfig(this.defaultConfig, config);
+  }
 }

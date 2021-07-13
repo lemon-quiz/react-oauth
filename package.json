@@ -2,13 +2,28 @@
   "name": "react-oauth",
   "version": "0.0.1",
   "description": "oAuth stuff",
-  "main": "index.js",
   "repository": "git@github.com:lemon-quiz/react-oauth.git",
   "author": "raymond <rsvvuuren@hotmail.com>",
   "license": "MIT",
+  "main": "cjs/index.js",
+  "module": "es/index.js",
+  "files": [
+    "cjs",
+    "es",
+    "bridge",
+    "index.d.ts",
+    "base.d.ts",
+    "challenge.d.ts",
+    "client.d.ts",
+    "interfaces.d.ts",
+    "refreshToken.d.ts",
+    "state.d.ts",
+    "token.d.ts"
+  ],
   "scripts": {
     "build": "rollup -c",
-    "lint": "eslint  -c .eslint --ext .ts,.tsx \"src/**\""
+    "lint": "eslint  -c .eslintrc.json --ext .ts,.tsx \"src/**\"",
+    "fix": "eslint --fix -c .eslintrc.json --ext .ts,.tsx \"src/**\""
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",

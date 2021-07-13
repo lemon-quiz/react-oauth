@@ -1,4 +1,6 @@
 import Base from './base';
+import CookieUniversal from './bridge/CookieUniversal';
+import StorageLocalForage from './bridge/StorageLocalForage';
 import Challenge from './challenge';
 import Client from './client';
 import {
@@ -17,7 +19,14 @@ import State from './state';
 import Token from './token';
 
 export {
-  Client, Base, Challenge, RefreshToken, State, Token,
+  Client,
+  Base,
+  Challenge,
+  RefreshToken,
+  State,
+  Token,
+  CookieUniversal,
+  StorageLocalForage,
 };
 
 export type { BaseInterface };

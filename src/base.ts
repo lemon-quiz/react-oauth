@@ -5,39 +5,41 @@ import {
   TokenConfig,
 } from './interfaces';
 
-export default class Base {
+export default abstract class Base {
   protected defaultConfig: TokenConfig = {
     prefix: 'oauth_',
   };
 
-  protected config: TokenConfig;
+  public config: TokenConfig;
 
-  constructor(
+  protected constructor(
     protected storage: StorageInterface,
-    config?: TokenConfig,
+    // eslint-disable-next-line no-empty-function
   ) {
-    if (config) {
-      this.setConfig(config);
-    }
+
   }
 
-  get(options?: CookieGetOptions): any {
+  public get(options?: CookieGetOptions): Promise<any> {
     return this.storage.get(this.getName(), options);
   }
 
-  remove(options?: CookieSetOptions): void {
+  public remove(options?: CookieSetOptions): void {
     this.storage.remove(this.getName(), options);
   }
 
-  set(value: Data, options?: CookieSetOptions): void {
+  public set(value: Data, options?: CookieSetOptions): void {
     this.storage.set(this.getName(), value, options);
   }
 
-  public setConfig(config: TokenConfig) {
-    this.config = { ...this.defaultConfig, ...config };
+  public setConfig(defaultConfig: TokenConfig, config?: TokenConfig) {
+    if (config) {
+      this.config = { ...defaultConfig, ...config };
+      return;
+    }
+    this.config = { ...defaultConfig };
   }
 
-  protected getName() {
+  public getName(): string {
     const { prefix, name } = this.config;
 
     if (!prefix) {

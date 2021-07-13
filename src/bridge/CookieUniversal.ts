@@ -3,26 +3,24 @@ import Cookies from 'universal-cookie';
 import {
   CookieGetOptions,
   CookieSetOptions,
-  StorageInterface,
   Data,
+  StorageInterface,
 } from '../interfaces';
 
 export default class CookieUniversal implements StorageInterface {
-  private cookies: Cookies;
-
-  constructor() {
-    this.cookies = new Cookies();
+  // eslint-disable-next-line no-empty-function
+  constructor(private instance: Cookies) {
   }
 
   public set(name: string, value: Data, options?: CookieSetOptions): void {
-    this.cookies.set(name, value, { path: '/', ...options });
+    this.instance.set(name, value, { path: '/', ...options });
   }
 
-  public get(name: string, options?: CookieGetOptions): string {
-    return this.cookies.get(name, options);
+  public async get(name: string, options?: CookieGetOptions): Promise<string> {
+    return Promise.resolve(this.instance.get(name, options));
   }
 
-  public remove(name: string, options?: CookieSetOptions): void {
-    this.cookies.remove(name, { path: '/', ...options });
+  public async remove(name: string, options?: CookieSetOptions): Promise<void> {
+    await this.instance.remove(name, { path: '/', ...options });
   }
 }
