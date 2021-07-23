@@ -19,16 +19,16 @@ export default abstract class Base {
 
   }
 
-  public get(options?: CookieGetOptions): Promise<any> {
-    return this.storage.get(this.getName(), options);
+  public get<T = Data>(options?: CookieGetOptions): Promise<T> {
+    return this.storage.get<T>(this.getName(), options);
   }
 
   public remove(options?: CookieSetOptions): void {
     this.storage.remove(this.getName(), options);
   }
 
-  public set(value: Data, options?: CookieSetOptions): void {
-    this.storage.set(this.getName(), value, options);
+  public set<T>(value: T, options?: CookieSetOptions): Promise<T> {
+    return this.storage.set<T>(this.getName(), value, options);
   }
 
   public setConfig(defaultConfig: TokenConfig, config?: TokenConfig) {

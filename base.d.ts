@@ -4,9 +4,9 @@ export default abstract class Base {
     protected defaultConfig: TokenConfig;
     config: TokenConfig;
     protected constructor(storage: StorageInterface);
-    get(options?: CookieGetOptions): Promise<any>;
+    get<T = Data>(options?: CookieGetOptions): Promise<T>;
     remove(options?: CookieSetOptions): void;
-    set(value: Data, options?: CookieSetOptions): void;
+    set<T>(value: T, options?: CookieSetOptions): Promise<T>;
     setConfig(defaultConfig: TokenConfig, config?: TokenConfig): void;
     getName(): string;
 }

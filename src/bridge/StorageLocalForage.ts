@@ -13,15 +13,15 @@ export default class StorageLocalForage implements StorageInterface {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public set(name: string, value: Data, _options?: CookieSetOptions): void {
-    this.instance.setItem(name, value);
+  public set<T = Data>(name: string, value: T, _options?: CookieSetOptions): Promise<T> {
+    return this.instance.setItem<T>(name, value);
   }
 
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async get(name: string, _options?: CookieGetOptions): Promise<string> {
+  public async get<T = Data>(name: string, _options?: CookieGetOptions): Promise<T> {
     // eslint-disable-next-line no-return-await
-    return await this.instance.getItem<string | null>(name);
+    return await this.instance.getItem<T>(name);
   }
 
   public async remove(name: string): Promise<void> {

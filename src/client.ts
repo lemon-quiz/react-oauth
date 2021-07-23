@@ -1,4 +1,3 @@
-import forge from 'node-forge';
 import { v4 as uuidv4 } from 'uuid';
 
 import Challenge from './challenge';
@@ -26,44 +25,26 @@ export default class Client {
     if (!window) {
       throw new Error('Oauth service can only be run client side.');
     }
-
-    const challenge = this.getChallenge();
     const state = uuidv4().replaceAll('-', '');
-    this.state.set(state);
 
-    const { client_id, authenticateUri } = this.config;
+    Promise.all([
+      this.challenge.generate(),
+      this.state.set(state)]).then(([challenge]) => {
+      const { client_id, authenticateUri } = this.config;
 
-    const params = {
-      state,
-      client_id,
-      scope,
-      redirect_uri: this.getRedirectUri(),
-      response_type: 'code',
-      code_challenge: challenge,
-      code_challenge_method: 'S256',
-    };
+      const params = {
+        state,
+        client_id,
+        scope,
+        redirect_uri: this.getRedirectUri(),
+        response_type: 'code',
+        code_challenge: challenge,
+        code_challenge_method: 'S256',
+      };
 
-    const searchParams = new URLSearchParams(params as any);
-
-    window.location.href = `${authenticateUri as string}?${searchParams.toString()}`;
-  }
-
-  private getChallenge(): string {
-    let challenge = `${(uuidv4() as string)}${(uuidv4() as string)}${(uuidv4() as string)}`;
-    challenge = challenge.replaceAll('-', '');
-
-    const md = forge.md.sha256.create();
-    md.update(challenge);
-    // noinspection UnnecessaryLocalVariableJS
-    const code = forge.util.encode64(md.digest().data);
-
-    const hash = code.replaceAll('+', '-')
-      .replaceAll('/', '_')
-      .replace(/=$/, '');
-
-    this.challenge.set(challenge);
-
-    return hash;
+      const searchParams = new URLSearchParams(params as any);
+      window.location.href = `${authenticateUri as string}?${searchParams.toString()}`;
+    });
   }
 
   public async getRequestTokenData(state: string, code: string): Promise<DataInterface> {

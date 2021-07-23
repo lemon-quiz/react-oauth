@@ -12,11 +12,13 @@ export default class CookieUniversal implements StorageInterface {
   constructor(private instance: Cookies) {
   }
 
-  public set(name: string, value: Data, options?: CookieSetOptions): void {
+  public set<T = Data>(name: string, value: T, options?: CookieSetOptions): Promise<T> {
     this.instance.set(name, value, { path: '/', ...options });
+
+    return Promise.resolve<T>(value);
   }
 
-  public async get(name: string, options?: CookieGetOptions): Promise<string> {
+  public async get<T = Data>(name: string, options?: CookieGetOptions): Promise<T> {
     return Promise.resolve(this.instance.get(name, options));
   }
 

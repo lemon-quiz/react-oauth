@@ -4,7 +4,7 @@ import Base from './base';
 import {
   BaseInterface,
   CookieGetOptions,
-  CookieSetOptions,
+  CookieSetOptions, Data,
   ParseTokenInterface,
   StorageInterface, TokenConfig,
 } from './interfaces';
@@ -23,9 +23,11 @@ export default class Token extends Base implements BaseInterface {
     this.setConfig(this.defaultConfig, config);
   }
 
-  public set(token: string, options?: CookieSetOptions): void {
-    this.storage.set(this.getName(), token, options);
-    this.parseToken(token);
+  public set<T = Data>(value: T, options?: CookieSetOptions): Promise<T> {
+    if (typeof value === 'string') {
+      this.parseToken(value);
+    }
+    return this.storage.set<T>(this.getName(), value, options);
   }
 
   private parseToken(token: string): void {
@@ -66,7 +68,7 @@ export default class Token extends Base implements BaseInterface {
   public async loadToken(options?: CookieGetOptions): Promise<boolean> {
     const token = await this.get(options);
 
-    if (!token) {
+    if (!token || typeof token !== 'string') {
       return false;
     }
 

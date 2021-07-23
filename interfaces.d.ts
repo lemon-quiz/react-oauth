@@ -12,8 +12,8 @@ export interface CookieSetOptions {
     encode?: (value: string) => string;
 }
 export interface StorageInterface {
-    get: (name: string, options?: CookieGetOptions) => any;
-    set(name: string, value: Data, options?: CookieSetOptions): void;
+    get<T = Data>(name: string, options?: CookieGetOptions): Promise<T>;
+    set<T = Data>(name: string, value: T, options?: CookieSetOptions): Promise<T>;
     remove(name: string, options?: CookieSetOptions): void;
 }
 export interface DataInterface {
@@ -39,7 +39,7 @@ export interface ParseTokenInterface {
     [key: string]: any;
 }
 export interface BaseInterface {
-    get(options?: CookieGetOptions): any;
-    set(value: Data, options?: CookieSetOptions): void;
+    get<T = Data>(options?: CookieGetOptions): Promise<T>;
+    set<T = Data>(value: T, options?: CookieSetOptions): Promise<T>;
     remove(options?: CookieSetOptions): void;
 }

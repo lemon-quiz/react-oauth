@@ -8,7 +8,6 @@ export default class Client {
     constructor(config: OAuthConfigInterface, challenge: Challenge, state: State);
     getConfig(key?: string): string | OAuthConfigInterface;
     authorize(scope: string): void;
-    private getChallenge;
     getRequestTokenData(state: string, code: string): Promise<DataInterface>;
     getRefreshTokenData(scope: string, token: string): {
         uri: string;

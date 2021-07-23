@@ -16,7 +16,7 @@ class Base {
         this.storage.remove(this.getName(), options);
     }
     set(value, options) {
-        this.storage.set(this.getName(), value, options);
+        return this.storage.set(this.getName(), value, options);
     }
     setConfig(defaultConfig, config) {
         if (config) {
@@ -41,6 +41,7 @@ class CookieUniversal {
     }
     set(name, value, options) {
         this.instance.set(name, value, { path: '/', ...options });
+        return Promise.resolve(value);
     }
     async get(name, options) {
         return Promise.resolve(this.instance.get(name, options));
@@ -57,7 +58,7 @@ class StorageLocalForage {
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     set(name, value, _options) {
-        this.instance.setItem(name, value);
+        return this.instance.setItem(name, value);
     }
     // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -80,6 +81,19 @@ class Challenge extends Base {
         };
         this.setConfig(this.defaultConfig, config);
     }
+    generate() {
+        let challenge = `${v4()}${v4()}${v4()}`;
+        challenge = challenge.replaceAll('-', '');
+        const md = forge.md.sha256.create();
+        md.update(challenge);
+        // noinspection UnnecessaryLocalVariableJS
+        const code = forge.util.encode64(md.digest().data);
+        const hash = code.replaceAll('+', '-')
+            .replaceAll('/', '_')
+            .replace(/=$/, '');
+        this.set(challenge);
+        return Promise.resolve(hash);
+    }
 }
 
 class Client {
@@ -98,34 +112,24 @@ class Client {
         if (!window) {
             throw new Error('Oauth service can only be run client side.');
         }
-        const challenge = this.getChallenge();
         const state = v4().replaceAll('-', '');
-        this.state.set(state);
-        const { client_id, authenticateUri } = this.config;
-        const params = {
-            state,
-            client_id,
-            scope,
-            redirect_uri: this.getRedirectUri(),
-            response_type: 'code',
-            code_challenge: challenge,
-            code_challenge_method: 'S256',
-        };
-        const searchParams = new URLSearchParams(params);
-        window.location.href = `${authenticateUri}?${searchParams.toString()}`;
-    }
-    getChallenge() {
-        let challenge = `${v4()}${v4()}${v4()}`;
-        challenge = challenge.replaceAll('-', '');
-        const md = forge.md.sha256.create();
-        md.update(challenge);
-        // noinspection UnnecessaryLocalVariableJS
-        const code = forge.util.encode64(md.digest().data);
-        const hash = code.replaceAll('+', '-')
-            .replaceAll('/', '_')
-            .replace(/=$/, '');
-        this.challenge.set(challenge);
-        return hash;
+        Promise.all([
+            this.challenge.generate(),
+            this.state.set(state)
+        ]).then(([challenge]) => {
+            const { client_id, authenticateUri } = this.config;
+            const params = {
+                state,
+                client_id,
+                scope,
+                redirect_uri: this.getRedirectUri(),
+                response_type: 'code',
+                code_challenge: challenge,
+                code_challenge_method: 'S256',
+            };
+            const searchParams = new URLSearchParams(params);
+            window.location.href = `${authenticateUri}?${searchParams.toString()}`;
+        });
     }
     async getRequestTokenData(state, code) {
         const localState = await this.state.get();
@@ -202,9 +206,11 @@ class Token extends Base {
         };
         this.setConfig(this.defaultConfig, config);
     }
-    set(token, options) {
-        this.storage.set(this.getName(), token, options);
-        this.parseToken(token);
+    set(value, options) {
+        if (typeof value === 'string') {
+            this.parseToken(value);
+        }
+        return this.storage.set(this.getName(), value, options);
     }
     parseToken(token) {
         this.parsed = jwt_decode(token);
@@ -235,7 +241,7 @@ class Token extends Base {
     }
     async loadToken(options) {
         const token = await this.get(options);
-        if (!token) {
+        if (!token || typeof token !== 'string') {
             return false;
         }
         this.parseToken(token);
