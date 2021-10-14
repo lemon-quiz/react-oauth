@@ -1,6 +1,6 @@
 {
   "name": "react-oauth",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "oAuth stuff",
   "repository": "git@github.com:lemon-quiz/react-oauth.git",
   "author": "raymond <rsvvuuren@hotmail.com>",
