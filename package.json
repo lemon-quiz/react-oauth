@@ -15,6 +15,7 @@
     "base.d.ts",
     "challenge.d.ts",
     "client.d.ts",
+    "init.d.ts",
     "interfaces.d.ts",
     "refreshToken.d.ts",
     "state.d.ts",
