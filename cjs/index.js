@@ -262,10 +262,40 @@ class Token extends Base {
     }
 }
 
+class Init {
+    constructor(oAuthConfig, storage, options) {
+        var _a, _b, _c, _d;
+        this.oAuthConfig = oAuthConfig;
+        this.storage = storage;
+        this.options = options;
+        this.token = new Token(((_a = options === null || options === void 0 ? void 0 : options.token) === null || _a === void 0 ? void 0 : _a.storage) || storage, options === null || options === void 0 ? void 0 : options.token);
+        this.refreshToken = new RefreshToken(((_b = options === null || options === void 0 ? void 0 : options.refreshToken) === null || _b === void 0 ? void 0 : _b.storage) || storage, options === null || options === void 0 ? void 0 : options.refreshToken);
+        this.challenge = new Challenge(((_c = options === null || options === void 0 ? void 0 : options.challenge) === null || _c === void 0 ? void 0 : _c.storage) || storage, options === null || options === void 0 ? void 0 : options.challenge);
+        this.state = new State(((_d = options === null || options === void 0 ? void 0 : options.state) === null || _d === void 0 ? void 0 : _d.storage) || storage, options === null || options === void 0 ? void 0 : options.state);
+        this.client = new Client(this.oAuthConfig, this.challenge, this.state);
+    }
+    getToken() {
+        return this.token;
+    }
+    getRefreshToken() {
+        return this.refreshToken;
+    }
+    getChallenge() {
+        return this.challenge;
+    }
+    getState() {
+        return this.state;
+    }
+    getClient() {
+        return this.client;
+    }
+}
+
 exports.Base = Base;
 exports.Challenge = Challenge;
 exports.Client = Client;
 exports.CookieUniversal = CookieUniversal;
+exports.Init = Init;
 exports.RefreshToken = RefreshToken;
 exports.State = State;
 exports.StorageLocalForage = StorageLocalForage;

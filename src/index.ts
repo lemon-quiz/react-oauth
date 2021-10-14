@@ -3,12 +3,14 @@ import CookieUniversal from './bridge/CookieUniversal';
 import StorageLocalForage from './bridge/StorageLocalForage';
 import Challenge from './challenge';
 import Client from './client';
+import Init from './init';
 import {
   BaseInterface,
   CookieGetOptions,
   CookieSetOptions,
   Data,
   DataInterface,
+  InitOptionsInterface,
   OAuthConfigInterface,
   ParseTokenInterface,
   StorageInterface,
@@ -27,6 +29,7 @@ export {
   Token,
   CookieUniversal,
   StorageLocalForage,
+  Init,
 };
 
 export type { BaseInterface };
@@ -38,3 +41,4 @@ export type { OAuthConfigInterface };
 export type { ParseTokenInterface };
 export type { StorageInterface };
 export type { TokenConfig };
+export type { InitOptionsInterface };

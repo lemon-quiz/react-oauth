@@ -30,8 +30,9 @@ export interface OAuthConfigInterface {
     scope: string;
 }
 export interface TokenConfig {
-    prefix: string;
+    prefix?: string;
     name?: string;
+    storage?: StorageInterface;
 }
 export interface ParseTokenInterface {
     scopes: string;
@@ -42,4 +43,10 @@ export interface BaseInterface {
     get<T = Data>(options?: CookieGetOptions): Promise<T>;
     set<T = Data>(value: T, options?: CookieSetOptions): Promise<T>;
     remove(options?: CookieSetOptions): void;
+}
+export interface InitOptionsInterface {
+    token?: TokenConfig;
+    challenge?: TokenConfig;
+    refreshToken?: TokenConfig;
+    state?: TokenConfig;
 }
