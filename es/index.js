@@ -150,9 +150,9 @@ class Client {
         };
     }
     getRefreshTokenData(scope, token) {
-        const { client_id, tokenUri } = this.config;
+        const { client_id, tokenUri, refreshUri } = this.config;
         return {
-            uri: tokenUri,
+            uri: refreshUri || tokenUri,
             data: {
                 client_id,
                 scope,

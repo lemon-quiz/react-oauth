@@ -22,7 +22,7 @@ export interface DataInterface {
 export declare type Data = DataInterface | string | number;
 export interface OAuthConfigInterface {
     tokenUri: string;
-    refreshUri: string;
+    refreshUri?: string;
     authenticateUri: string;
     client_id: string | number;
     redirectUri: string;

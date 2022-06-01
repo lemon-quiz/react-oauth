@@ -93,10 +93,10 @@ class Challenge extends Base {
     generate() {
         let challenge = `${uuid.v4()}${uuid.v4()}${uuid.v4()}`;
         challenge = challenge.replaceAll('-', '');
-        const md = forge__default['default'].md.sha256.create();
+        const md = forge__default["default"].md.sha256.create();
         md.update(challenge);
         // noinspection UnnecessaryLocalVariableJS
-        const code = forge__default['default'].util.encode64(md.digest().data);
+        const code = forge__default["default"].util.encode64(md.digest().data);
         const hash = code.replaceAll('+', '-')
             .replaceAll('/', '_')
             .replace(/=$/, '');
@@ -159,9 +159,9 @@ class Client {
         };
     }
     getRefreshTokenData(scope, token) {
-        const { client_id, tokenUri } = this.config;
+        const { client_id, tokenUri, refreshUri } = this.config;
         return {
-            uri: tokenUri,
+            uri: refreshUri || tokenUri,
             data: {
                 client_id,
                 scope,
@@ -222,7 +222,7 @@ class Token extends Base {
         return this.storage.set(this.getName(), value, options);
     }
     parseToken(token) {
-        this.parsed = jwt_decode__default['default'](token);
+        this.parsed = jwt_decode__default["default"](token);
     }
     getParsed() {
         return this.parsed;
